@@ -51,24 +51,41 @@ and any("wKi" in x for x in Board):             #while the kings are alive
     else:
         Board[int(coord(white_to)[0])][int(coord(white_to)[1])]\
         = Board[int(coord(white_from)[0])][int(coord(white_from)[1])]
-        log.append([Board[int(coord(white_from)[0])][int(coord(white_from)[1])], white_from, white_to])
-        print log
         if white_to[1] == '8'\
         and Board[int(coord(white_from)[0])][int(coord(white_from)[1])] == 'wPa':
             Board[int(coord(white_to)[0])][int(coord(white_to)[1])] = 'wQu' #queening condition
-#        if log[-2][0] == 'bPa'\
-#        and int(log[-2][1][1]) - int(log[-2][2][1]) == 2\
-#        and int(white_from[1]) - int(white_to[1]) == -1\
-#        and abs(int(coord(white_from)[1]) - int(coord(white_to)[1])) == 1\
-#        and Board[int(coord(white_to)[0]) + 1][int(coord(white_to)[1])][0] == 'b':
-#            if (key[white_from[0]]+int(white_from[1]))%2 == 0:
-#                Board[int(coord(white_from)[0])-1][int(coord(white_from)[1])] = ' W '
-#            else:
-#                Board[int(coord(white_from)[0])-1][int(coord(white_from)[1])] = ' B '
+        if len(log) > 0\
+        and log[-1][0] == 'bPa'\
+        and Board[int(coord(white_from)[0])][int(coord(white_from)[1])] == 'wPa'\
+        and int(log[-1][1][1]) - int(log[-1][2][1]) == 2\
+        and int(white_from[1]) - int(white_to[1]) == -1\
+        and abs(int(coord(white_from)[1]) - int(coord(white_to)[1])) == 1\
+        and Board[int(coord(white_to)[0]) + 1][int(coord(white_to)[1])][0] == 'b': #en passant
+            if (key[white_from[0]]+int(white_from[1]))%2 == 0:
+                Board[int(coord(white_to)[0])+1][int(coord(white_to)[1])] = ' W '
+            else:
+                Board[int(coord(white_to)[0])+1][int(coord(white_to)[1])] = ' B '
+        if white_from == 'e1'\
+        and 'wKi' not in ''.join(reduce(lambda x, y: x+y, log))\
+        and 'wRoa1' not in ''.join(reduce(lambda x, y: x+y, log))\
+        and Board[int(coord('b1')[0])][int(coord('b1')[1])] == ' W '\
+        and Board[int(coord('d1')[0])][int(coord('d1')[1])] == ' W '\
+        and white_to == 'c1': #castle left
+            Board[int(coord('d1')[0])][int(coord('d1')[1])] = 'wRo'
+            Board[int(coord('a1')[0])][int(coord('a1')[1])] = ' B '
+        if white_from == 'e1'\
+        and 'wKi' not in ''.join(reduce(lambda x, y: x+y, log))\
+        and 'wRoh1' not in ''.join(reduce(lambda x, y: x+y, log))\
+        and Board[int(coord('f1')[0])][int(coord('f1')[1])] == ' W '\
+        and white_to == 'g1': #castle right
+            Board[int(coord('f1')[0])][int(coord('f1')[1])] = 'wRo'
+            Board[int(coord('h1')[0])][int(coord('h1')[1])] = ' W '
         if (key[white_from[0]]+int(white_from[1]))%2 == 1:
             Board[int(coord(white_from)[0])][int(coord(white_from)[1])] = ' W '
         else:
             Board[int(coord(white_from)[0])][int(coord(white_from)[1])] = ' B '
+        log.append([Board[int(coord(white_to)[0])][int(coord(white_to)[1])], white_from, white_to])
+        print log
     for x in Board:
         print x                                 #end white's turn and print board
 
@@ -84,24 +101,41 @@ and any("wKi" in x for x in Board):             #while the kings are alive
         else:
             Board[int(coord(black_to)[0])][int(coord(black_to)[1])]\
             = Board[int(coord(black_from)[0])][int(coord(black_from)[1])]
-            log.append([Board[int(coord(black_from)[0])][int(coord(black_from)[1])], black_from, black_to])
-            print log
             if black_to[1] == '1'\
             and Board[int(coord(black_from)[0])][int(coord(black_from)[1])] == 'bPa':
                 Board[int(coord(black_to)[0])][int(coord(black_to)[1])] = 'bQu' #queening condition
-#            if log[-2][0] == 'wPa'\
-#            and int(log[-2][1][1]) - int(log[-2][2][1]) == -2\
-#            and int(black_from[1]) - int(black_to[1]) == 1\
-#            and abs(int(coord(black_from)[1]) - int(coord(black_to)[1])) == 1\
-#            and Board[int(coord(black_to)[0]) - 1][int(coord(black_to)[1])][0] == 'w':
-#                if (key[black_from[0]]+int(black_from[1]))%2 == 0:
-#                    Board[int(coord(black_from)[0])-1][int(coord(black_from)[1])] = ' W '
-#                else:
-#                    Board[int(coord(black_from)[0])-1][int(coord(black_from)[1])] = ' B '
+            if len(log) > 0\
+            and Board[int(coord(black_from)[0])][int(coord(black_from)[1])] == 'bPa'\
+            and log[-1][0] == 'wPa'\
+            and int(log[-1][1][1]) - int(log[-1][2][1]) == -2\
+            and int(black_from[1]) - int(black_to[1]) == 1\
+            and abs(int(coord(black_from)[1]) - int(coord(black_to)[1])) == 1\
+            and Board[int(coord(black_to)[0]) - 1][int(coord(black_to)[1])][0] == 'w': #en passant
+                if (key[black_from[0]]+int(black_from[1]))%2 == 0:
+                    Board[int(coord(black_to)[0])-1][int(coord(black_to)[1])] = ' W '
+                else:
+                    Board[int(coord(black_to)[0])-1][int(coord(black_to)[1])] = ' B '
+            if black_from == 'e8'\
+            and 'bKi' not in ''.join(reduce(lambda x, y: x+y, log))\
+            and 'bRoa8' not in ''.join(reduce(lambda x, y: x+y, log))\
+            and Board[int(coord('b8')[0])][int(coord('b8')[1])] == ' B '\
+            and Board[int(coord('d8')[0])][int(coord('d8')[1])] == ' B '\
+            and black_to == 'c8': #castle right
+                Board[int(coord('d8')[0])][int(coord('d8')[1])] = 'bRo'
+                Board[int(coord('a8')[0])][int(coord('a8')[1])] = ' W '
+            if black_from == 'e8'\
+            and 'bKi' not in ''.join(reduce(lambda x, y: x+y, log))\
+            and 'bRoh8' not in ''.join(reduce(lambda x, y: x+y, log))\
+            and Board[int(coord('f8')[0])][int(coord('f8')[1])] == ' B '\
+            and black_to == 'g8': #castle left
+                Board[int(coord('f8')[0])][int(coord('f8')[1])] = 'bRo'
+                Board[int(coord('h8')[0])][int(coord('h8')[1])] = ' B '
             if (key[black_from[0]]+int(black_from[1]))%2 == 1:
                 Board[int(coord(black_from)[0])][int(coord(black_from)[1])] = ' W '
             else:
                 Board[int(coord(black_from)[0])][int(coord(black_from)[1])] = ' B '
+            log.append([Board[int(coord(black_to)[0])][int(coord(black_to)[1])], black_from, black_to])
+            print log
         for x in Board:
             print x                               #end white's turn and print board
 print 'Game Over'

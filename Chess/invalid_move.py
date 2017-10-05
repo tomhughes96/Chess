@@ -1,4 +1,3 @@
-'''pawns do not take with en passant and no castling yet'''
 from coord import coord
 
 def invalid_move(board, colour_from, colour_to, c, log):
@@ -90,7 +89,36 @@ def invalid_move(board, colour_from, colour_to, c, log):
             and abs(int(coord(colour_to)[0]) - int(coord(colour_from)[0])) == 1):
             #single space vertical movement or horizontal movement or diagonal movement
                 return False
-            #elif wKi hasnt moved and wRo hasnt moved and spaces between are empty can castle
+            elif piece == 'bKi'\
+            and 'bKi' not in ''.join(reduce(lambda x,y: x+y,log))\
+            and 'bRoa8' not in ''.join(reduce(lambda x,y: x+y,log))\
+            and board[int(coord('b8')[0])][int(coord('b8')[1])] == ' B '\
+            and board[int(coord('c8')[0])][int(coord('c8')[1])] == ' W '\
+            and board[int(coord('d8')[0])][int(coord('d8')[1])] == ' B '\
+            and colour_to == 'c8': #black castle left
+                return False
+            elif piece == 'bKi'\
+            and 'bKi' not in ''.join(reduce(lambda x,y: x+y,log))\
+            and 'bRoh8' not in ''.join(reduce(lambda x,y: x+y,log))\
+            and board[int(coord('f8')[0])][int(coord('f8')[1])] == ' B '\
+            and board[int(coord('g8')[0])][int(coord('g8')[1])] == ' W '\
+            and colour_to == 'g8': #black castle right
+                return False
+            elif piece == 'wKi'\
+            and 'wKi' not in ''.join(reduce(lambda x,y: x+y,log))\
+            and 'wRoa1' not in ''.join(reduce(lambda x,y: x+y,log))\
+            and board[int(coord('b1')[0])][int(coord('b1')[1])] == ' W '\
+            and board[int(coord('c1')[0])][int(coord('c1')[1])] == ' B '\
+            and board[int(coord('d1')[0])][int(coord('d1')[1])] == ' W '\
+            and colour_to == 'c1': #white castle left
+                return False
+            elif piece == 'wKi'\
+            and 'wKi' not in ''.join(reduce(lambda x,y: x+y,log))\
+            and 'wRoh1' not in ''.join(reduce(lambda x,y: x+y,log))\
+            and board[int(coord('f1')[0])][int(coord('f1')[1])] == ' W '\
+            and board[int(coord('g1')[0])][int(coord('g1')[1])] == ' B '\
+            and colour_to == 'g1': #white castle right
+                return False
             else:
                 return True
         if piece == 'wKn' or piece == 'bKn': #if knight
